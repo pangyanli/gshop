@@ -1,12 +1,11 @@
 <template>
   <div class="profile">
     <!--首页头部-->
-   <!-- <header class="shop_head">
+    <header class="shop_head">
       <span class="header_title">
         <span class="header_title_text ellipsis">我的</span>
       </span>
-    </header>-->
-    <HeaderTop title="我的"/>
+    </header>
     <section class="profile-number">
       <a href="javascript:" class="profile-link">
         <div class="profile_image">
@@ -98,12 +97,7 @@
 </template>
 
 <script>
-  import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
-  export default{
-    components:{
-      HeaderTop
-    }
-  }
+  export default{}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

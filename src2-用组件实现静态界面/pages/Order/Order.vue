@@ -1,12 +1,11 @@
 <template>
   <div class="order">
     <!--首页头部-->
-    <!--<header class="shop_head">
+    <header class="shop_head">
       <span class="header_title">
         <span class="header_title_text ellipsis">订单列表</span>
       </span>
-    </header>-->
-    <HeaderTop title="订单"/>
+    </header>
     <section class="order_no_login">
       <img src="./images/person.png">
       <h3>登录后查看外卖订单</h3>
@@ -16,12 +15,7 @@
 </template>
 
 <script>
-  import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
-  export default{
-    components:{
-      HeaderTop
-    }
-  }
+  export default{}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
