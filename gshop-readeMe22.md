@@ -133,6 +133,8 @@
           （2）启动服务器应用（进入gshop_server文件夹），打开命令提示符窗口，输入npm start 运行起来
           （3）打开postman测试接口工具，将  硅谷外卖-接口.postman_collection 文件导入
                 然后测试文件中的8个接口是否否是通的
+          （4）api/ajax.js ：封装ajax请求模块
+          （5）api/index.js ：引入封装好的ajax，写包含多个请求函数与后台交互
 
 
 ## 项目中遇到的问题
