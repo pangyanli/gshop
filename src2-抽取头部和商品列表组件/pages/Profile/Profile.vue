@@ -8,9 +8,7 @@
     </header>-->
     <HeaderTop title="我的"/>
     <section class="profile-number">
-      <!-- 将a标签换成router-link标签 -->
-      <!--<a href="javascript:" class="profile-link">-->
-      <router-link to="/login" class="profile-link">
+      <a href="javascript:" class="profile-link">
         <div class="profile_image">
           <i class="iconfont icon-person"></i>
         </div>
@@ -24,9 +22,9 @@
           </p>
         </div>
         <span class="arrow">
-          <i class="iconfont icon-jiantou1"></i>
-        </span>
-      </router-link>
+              <i class="iconfont icon-jiantou1"></i>
+            </span>
+      </a>
     </section>
     <section class="profile_info_data border-1px">
       <ul class="info_data_list">

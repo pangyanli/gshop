@@ -97,18 +97,52 @@
                   记得引入 @import '../../common/stylus/mixins.styl'
              （2） Msite.vue ：
                   引入HeaderTop组件 --> 映射成标签 --> 使用标签
+    ### 四、login登录页面
+          1、创建login路由：pages/Login文件夹/Login.vue
+          2、从静态页面index.html抽取登录页面的代码，index.styl中抽取对应的样式
+          3、touter/index.js中注册登录路由：  /login
+          4、Profile.vue ：注册登录那里一整块都有链接，将a标签改成router-link标签，并添加 to='/login'
+          5、Login.vue：将左上角回退的字体图标的a标签改成span标签，并添加回退事件 @click="$router.back()"
+          6、从静态页面中将svg图（验证码图）captcha.svg文件拷贝到当前路由下的images文件夹中
+          7、Login.vue : 短信登录与密码登录切换
+            （1）将短信登录与密码登录的a标签改成span标签，并绑定点击是否显示，样式根据点击事件来确定
+            <span :class="{on: showLogin}" @click="showLoginWay(true)">短信登录</span>
+            <span :class="{on: !showLogin}" @click="showLoginWay(false)">密码登录</span>
+            （2）在data中配置对应的数据和事件
+                export default{
+                    data(){
+                      return {
+                        showLogin: true // true是短信登录，false是密码登录
+                      }
+                    },
+                    methods: {
+                      showLoginWay(showLogin){
+                        this.showLogin = showLogin
+                      }
+                    }
+                  }
+          8、是否显示底部组件：
+            （1） router/index.js: 在需要底部组件的路由中添加一个meta对象属性来标识需要底部组件
+                  meta: {  // meta是个原数据，默认是个空对象，现在用来标识是否显示底部组件
+                        showFooter: true
+                      }
+            （2）App.vue ：<FooterGuide v-show="$route.meta.showFooter"/> 通过v-show来确定是否显示
 
-
+    ### 五、运行后台应用
+          （1）确保启动mongodb服务
+          （2）启动服务器应用（进入gshop_server文件夹），打开命令提示符窗口，输入npm start 运行起来
+          （3）打开postman测试接口工具，将  硅谷外卖-接口.postman_collection 文件导入
+                然后测试文件中的8个接口是否否是通的
 
 
 ## 项目中遇到的问题
-  1、FooterGuide 点击订单时没有显示内容，
-    （1）原因1：是因为路由配置时/后面多了个空格
-     router/index.js中的path: '/ order' --> 应该是path: '/order',
-    （2）原因2：在绑定事件监听时，传递跳转的路径写错了，在/前面多了个点
-     FooterGuide.vue中的 @click="goto('./msite')" --> 应该是 @click="goto('/msite')"
-     :class="{on:$route.path === './msite'}" --> 应该是 :class="{on:$route.path === '/msite'}"
-  2、首页的轮播图出不来（Msite.vue）
+  ### 1、FooterGuide 点击订单时没有显示内容，
+      （1）原因1：是因为路由配置时/后面多了个空格
+       router/index.js中的path: '/ order' --> 应该是path: '/order',
+      （2）原因2：在绑定事件监听时，传递跳转的路径写错了，在/前面多了个点
+       FooterGuide.vue中的 @click="goto('./msite')" --> 应该是 @click="goto('/msite')"
+       :class="{on:$route.path === './msite'}" --> 应该是 :class="{on:$route.path === '/msite'}"
+  ### 2、首页的轮播图出不来（Msite.vue）
       原因是没有引入swiper样式，import 'swiper/dist/css/swiper.min.css'
       注意：要使用swiper框架（第三方库），有四步
       （1）下载安装swiper :  npm install --save swiper
@@ -127,6 +161,24 @@
             }
           }
 
+
+## 使用vue脚手架创建项目的具体步骤
+  ### 一初始化项目
+      1、在指定的位置的地址栏中输入cmd，打开命令提示符
+      2、具体命令如下
+          npm install vue-cli -g   （如果之前安装过就不用再装了，执行完全局会多了一个vue命令）
+          vue init webpack waimai   （waimai是项目名，）
+          ？Project name (waimai)  --> 提示问是否确定以waimai为项目名，是的话就回车，不是的话就写出项目名然后回车
+          ？Projectdescription（A Vue.js project） --> 项目描述，可以直接回车不写
+          ？Author(...)   -->  回车
+          ?Vue buid runtime  --> 回车--> 回车
+          ？Install vue-router?  --> 回车   （是否安装vue-router插件）
+          ？Use Eslint to lint your code?  --> 回车 （是否使用eslint检查代码，需要，但是在编码的
+                            过程中可以设置忽略，项目做完了可以统一打开修改检查出来的问题）
+          ？Stardart...    -->  回车
+          ？Set up unit test   -->  n （不需要安装单元测试文件）
+          ？Set up e2e test with ....   --> n （不需要）
+          ？Should we run 'npm install' for you after... -->  Yes ,use NPM（然后就安装依赖了）
 
 
 
