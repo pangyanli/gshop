@@ -220,6 +220,18 @@
                            })
                          }
                        },
+    ### 八、发ajax请求获取商家列表，动态显示数据
+            1、Msite.vue：在mounted中发ajax请求获取商家列表shops  this.$store.dispatch('getShops')
+            2、ShopList.vue：使用mapState方法获取到shops，然后在第一个li使用v-for遍历shops
+                动态产生多个li列表（第一个li以后的li代码都可以删除了）
+            3、ShopList.vue: 其他要显示的内容都相应的改成动态获取来显示
+            4、因为会有多个地方使用到start评价星星，所以把start抽取成一个非路由组件，这样可以简化
+                代码，实现复用
+                （1）ShopList.vue：从这里将有关start的代码以及相关的stylus样式剪切到
+                    components/Start/Start.vue
+
+
+
 
 ## 项目中遇到的问题
   ### 1、FooterGuide 点击订单时没有显示内容，
