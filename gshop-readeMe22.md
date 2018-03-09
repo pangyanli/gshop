@@ -134,8 +134,92 @@
           （3）打开postman测试接口工具，将  硅谷外卖-接口.postman_collection 文件导入
                 然后测试文件中的8个接口是否否是通的
           （4）api/ajax.js ：封装ajax请求模块
-          （5）api/index.js ：引入封装好的ajax，写包含多个请求函数与后台交互
+          （5）api/index.js ：引入封装好的ajax，写包含多个请求函数与后台交互的接口
+    ### 六、前台与后台实现交互
+         1、使用vuex管理状态：
+            （1）创建文件夹及文件
+                store 文件夹
+                    |-- index.js   vuex的核心管理对象store对象模块
+                    |-- actions.js  包含多个通知mutation，间接更新状态的函数的对象模块
+                    |-- mutations.js  包含多个直接更新状态的函数的对象模块
+                    |-- state.js      状态对象模块
+                    |-- getters.js    计算state的getter对象
+                    |-- mutation-types.js   mutation type常量名称模块
+            （2）main.js   在入口js文件中注册store对象，先注册上，不然容易忘记
+            （3）index.js   创建store对象
+            （4）state.js   初始化需要管理的数据
+            （5）actions.js  根据api/index.js文件中的接口，来创建对应的action，引入mutation-types.js中的常量
+            （6）mutation-types.js   根据actions.js中提交给mutation的名称来定义对应的mutation函数常量名称
+            （7）mutations.js  根据actions.js提交的名称来定义对应的mutation函数
+         2、发送ajax请求获取地址信息
+            （1）Msite.vue：中头部的地址是动态从后台获取的，通过mapState，方法取到state中的address对象，
+                    再在取到address对象中的name属性值，就是要显示的地址了
+            （2）Msite.vue：在应用组件中调用vue声明周期中的mounted勾子函数发送ajax请求获取地址
+                 this.$store.dispatch('getAddress')  //注意分发对应的action
+         3、用代理解决跨域问题
+               因为后台运行服务器的端口号为3000，但是前台运行的服务器的端口号是8080，所以当前台发送ajax请求
+               到后台获取数据，就存在跨域问题了，在这里是用代理的方式来解决的，找到config文件夹/index.js文件
+               config/index.js: 在该文件中有一个 proxyTable:{}就是用来配置代理的，
+               proxyTable: {
+                     '/api': { // 匹配所有以'/api' 开头的请求路径
+                       target: 'http://localhost:3000', // 代理目标的基础路径（后台的端口）
+                       changeOrigin: true,  // 支持跨域
+                       pathRewrite: {
+                         '^/api': ''
+                       }
+                     }
+                   }
+               重写路径，去掉路径中开头的'/api' ,因为后台并没有'/api'，我们加上只是为了方便
+               匹配需要代理的路由，所有要去掉，否则后台处理不了
+         4、 api/index.js：给文件中的需要代理实现跨域访问的接口的url的前面添加  '/api'
 
+    ### 七、发送ajax请求，从后台动态获取食物分类列表
+        1、Msite.vue：通过vuex获取foodTypes数组(发请求, 读取)
+          （1）在mounted中发ajax请求获取食物分类列表，注意action名字与actions.js文件中的对应一致
+          （2）在computed中通过mapState方法读取数据 ...mapState(['footTypes']) footTypes必须要与state.js中的一致
+        2、Msite.vue：对数据进行整合计算（将译为数组变为二维数组）
+          （1）在computed：{}中计算foodTypesArr属性，定义一个大数组arr，里面放多个小数组；
+           定义一个小数组tempArr，最大放8个type；forEach遍历从state中取出来的foodTypes，先将新的小数组添加到
+           大数组中，然后看满足条件的就添加到小数组中，不满足的就再重新创建一个新的小数组，将该新的小数组添加到
+           大数组中，然后再讲type存到该新的小数组中，最后将大数组arr返回
+          （2）将foodTypesArr属性放到在模版代码的轮播代码中显示到界面，注意要两次v-for循环读取二维数组的数据
+              第一个v-for是遍历轮播页数的，第二个v-for是一页轮播图中显示type的个数
+          （3）修改轮播代码中img的路径，需要动态获取的，首先在data中定义imgBaseUrl: 'https://fuss10.elemecdn.com'
+            是数据库的链接，然后带模版代码中个img标签的href拼路径 <img :src="imgBaseUrl + type.image_url">
+            type.image_url这样写是因为接口文档的实例返回来的数据格式就是这样的
+          （4）解决创建Swipe的问题，因为之前是在mouted中直接创建的，但是定义得早了，因为界面还没更新，就开始渲染轮播了，
+              所以导致轮播效果出不来，那使用Swiper显示轮播, 如何在界面更新之后创建Swiper对象?有两个方法
+               1). 使用回调+$nextTick()
+                  // ①分发action时传在第二个参数传一个回调
+                  this.$store.dispatch('getFoodTypes', () => { //当界面更新了该回调函数调用，但是页面并没有更新
+                          this.$nextTick(() => { // 当前这次状态改变的界面更新已完成就调用
+                            var swiper = new Swiper('.swiper-container', {
+                              loop: true,
+                              pagination: {
+                                el: '.swiper-pagination'
+                              }
+                            })
+                          })
+                        })
+                   // ②  store/actions.js文件中， 在getFoodTypes函数中声明接收一个callbak
+                     然后在commit（）之后执行 callback && callback()
+               2). 使用watch+$nextTick()
+                  //① 在mounted中分发action
+                  mounted(){this.$store.dispatch('getFoodTypes'）}
+                  // ② 直接使用watch监视foodTypes
+                   watch: {
+                         footTypes(){
+                           this.$nextTick(() => {
+                             //swiper
+                             var swiper = new Swiper('.swiper-container', {
+                               loop: true,
+                               pagination: {
+                                 el: '.swiper-pagination'
+                               }
+                             })
+                           })
+                         }
+                       },
 
 ## 项目中遇到的问题
   ### 1、FooterGuide 点击订单时没有显示内容，
@@ -162,6 +246,19 @@
               })
             }
           }
+  ### 3、使用vuex管理数据
+        Msite.vue：中头部的地址动态获取到了但是在界面不能显示
+          提示报错：unknown mutation type: receive_address
+          原因1：原因是store/index.js，中引用mutations时单词写错了，少写了个o，所以识别不了mutations的类型
+          原因2：在 Msite.vue读取数据时，写错了，<HeaderTop :title="address">应该是
+          <HeaderTop :title="address.name"> ，因为address是个对象，必须取到它里面的name属性值才正确
+  ### 4、foodTypes数据获取不到，后台响应回来了，但是不能在页面显示，报如下错，
+          Error in render: "ReferenceError: footTypes is not defined" --> 说明foodTypes是undefined
+          原因1：footTypes，单词写错了，应该是foodTypes, 修改过来了还是报同样的错
+          原因2：从state中获取不到数据，获取方式不正确
+               ...mapState(['foodTypes'],['address'])这种方式是错误的，应该是
+                ...mapState(['foodTypes','address'])或者是下面的方式也可以
+                ...mapState({foodTypes:'foodTypes',address:'address'}) ，如果属性名不相同的话使用这个方法
 
 
 ## 使用vue脚手架创建项目的具体步骤
