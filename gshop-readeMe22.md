@@ -228,10 +228,22 @@
             4、因为会有多个地方使用到start评价星星，所以把start抽取成一个非路由组件，这样可以简化
                 代码，实现复用
                 （1）ShopList.vue：从这里将有关start的代码以及相关的stylus样式剪切到
-                    components/Start/Start.vue
+                    components/Start/Start.vue；
+                    然后：引入Start组件 --> 将组件映射成标签 --> 使用标签，通过标签属性传递评分和
+                    星星的尺寸大小 <Start :score="shop.rating" :size="24"/>
+                （2）Start.vue：
+                      1）props声明接收的数据score和size的类型，注意接收的数据都添加到组件的data中，直接this取就可以了
+                      2）在computed中计算score，根据评分来确定显示什么类型的星星以及个数
 
-
-
+     ### 九、登录：两种登录方式
+          Login.vue：
+          1、给form表单添加 @sumbmit.prevent='login'，阻止表单的默认行为（不提交），
+             将登录按钮的button标签改成input样式的,参照API文档，分别给需要收集数据的input添加v-model='...'
+             v-model指令的值要与API上的参数一致，并在data中初始化定义
+          2、先写短信登录的功能：
+            1）写一个初五提示框组件（UI组件）
+              components/AlertTip/AlertTip.vue,从world文档里赋值模版代码，在 Login.vue中引入AlertTip组件
+            2）输入合法手机号-->点击获取验证码，向后台发请求获取-->收到验证码输入-->正确则回退到上一页/错误显示提示框
 
 ## 项目中遇到的问题
   ### 1、FooterGuide 点击订单时没有显示内容，
@@ -271,8 +283,17 @@
                ...mapState(['foodTypes'],['address'])这种方式是错误的，应该是
                 ...mapState(['foodTypes','address'])或者是下面的方式也可以
                 ...mapState({foodTypes:'foodTypes',address:'address'}) ，如果属性名不相同的话使用这个方法
-
-
+  ### 5、ShopList.vue ：评分星星出不来，star写成start了，所以样式出不来，
+  ### 6、Login.vue：点击获取验证码，直接弹出提示框，也不报错
+          原因是没有阻止获取验证码的button的默认行为，如果不阻止，一点击就会触发提交,所以老是错误，提示框就出来了
+          如果阻止了，也还出现这样的情况，那就是后台服务器的问题（gshop_server/util/sms_util.js文件里的配置问题）
+  ### 7、Login.vue：输入验证码后，点击登录按钮，报错Request failed with status code 504
+        原因是 api/index.js: 封装ajax请求函数时，传参数错误，传多个的时候应该要大括号包起来变成对象
+          export const reqShops = (latitude, longitude) => ajax('/api/shops', {latitude, longitude})这样传参是错误的
+          应该这样：export const reqShops = ({latitude, longitude}) => ajax('/api/shops', {latitude, longitude})
+   ### 8、Login.vue：点击登录按钮后能正确登录进去到指定的的页面，效果没有问题，但是控制台有报错
+        unknown mutation type: RECEIVE_USER_INFO ，这是因为commit的时候给变量加引号了
+         commit('RECEIVE_USER_INFO',{userInfo})错误的 --> 应该是 commit(RECEIVE_USER_INFO,{userInfo})
 ## 使用vue脚手架创建项目的具体步骤
   ### 一初始化项目
       1、在指定的位置的地址栏中输入cmd，打开命令提示符

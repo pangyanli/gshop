@@ -12,16 +12,26 @@ export const reqFoodTyps = () => ajax('/api/index_category')
 export const reqShops = ({latitude, longitude}) => ajax('/api/shops', {latitude, longitude})
 
 // 4、获取图片验证码
-export const reqCaptchas = () => ajax('/api/captchas')
+export const reqCaptChas = () => ajax('/api/captchas')
 
 // 5、帐号密码登录
-export const accountLogin = (name, pwd, captcha) => ajax('/api/login_pwd',{name,pwd,captcha},'POST')
+export const pwdLogin = ({name, pwd, captcha}) => ajax('/api/login_pwd',{name,pwd,captcha},'POST')
 
-// 6、获取短信验证码
-export const mobileCode = phone => ajax('/api/sendcode', {phone})
+// 6、发送短信验证码
+export const reqMobileCode = phone => ajax('/api/sendcode', {phone})
 
-// 7、手机号验证码登录
-export const phoneLogin = (phone, code) => ajax('/api/login_sms', {phone,code}, 'POST')
+// 7、手机号验证码登陆
+export const phoneLogin = ({phone, code}) => ajax('/api/login_sms', {phone,code}, 'POST')
 
 //8、根据会话获取用户信息
 export const reqUser = () => ajax('/api/userinfo')
+
+// 9、获取商家商品列表
+export const reqShopGoods = () => ajax('/goods')
+
+// 9、获取商家评价列表
+export const reqRatings = () => ajax('/ratings')
+
+// 9、获取商家商品列表
+export const reqShopInfo = () => ajax('/info')
+

@@ -62,8 +62,8 @@ function sendCode(phone, code, callback) {
     }
 
     //4. 发送请求, 并得到返回的结果, 调用callback
-
-    request({
+  callback(true);  // 我自己修改的
+   /* request({
         method : 'POST',
         url : url,
         headers : headers,
@@ -73,7 +73,7 @@ function sendCode(phone, code, callback) {
         console.log(error, response, body);
         callback(body.statusCode==='000000');
         // callback(true);
-    });
+    });*/
 }
 exports.sendCode = sendCode;
 

@@ -5,5 +5,10 @@ export default {
   longitude: 116.36867,
   address: {},  // 获取地址，这里设置成{}而不用null,是因为到时候没有数据是address.name不会报错
   foodTypes: [],  // 获取食物分类列表
-  shops: []    // 获取商家列表
+  shops: [],    // 获取商家列表
+  userInfo: {},   // 用户信息
+  shopGoods: [],   // 商品列表
+  shopRatings: [],   //  评价列表
+  shopInfo: {}   //商家信息
+
 }

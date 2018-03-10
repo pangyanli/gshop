@@ -1,9 +1,11 @@
 <template>
   <div class="shop_container">
-    <ul class="shop_list">
+    <ul class="shop_list" v-if="shops.length">
       <!-- 使用v-for遍历shops动态显示数据，其他li可以删除了 -->
-      <li class="shop_li border-1px" v-for="(shop, index) in shops" :key="index">
-        <a>
+      <!--<li class="shop_li border-1px" v-for="(shop, index) in shops" :key="index">-->
+      <!-- 将li标签改成router-link标签，该标签中有个tag属性可以将router-link指定特点的标签 -->
+      <router-link to="/shop" tag="li" class="shop_li border-1px" v-for="(shop, index) in shops" :key="index">
+        <div>
           <div class="shop_left">
             <!--<img class="shop_img" src="./images/shop/1.jpg">-->
             <!-- 路径拼串 -->
@@ -14,20 +16,15 @@
               <h4 class="shop_title ellipsis" >{{shop.name}}</h4>
               <ul class="shop_detail_ul">
                 <!-- v-for遍历动态产生三个li 保、准、票-->
-                <li class="supports"v-for="item in shop.supports" :key="item.id">{{item.icon_name}}></li>
+                <li class="supports"v-for="item in shop.supports" :key="item.id">{{item.icon_name}}</li>
                 <!--<li class="supports">准</li>
                 <li class="supports">票</li>-->
               </ul>
             </section>
             <section class="shop_rating_order">
               <section class="shop_rating_order_left">
-                <div class="star star-24">
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item half"></span>
-                  <span class="star-item off"></span>
-                </div>
+                <!-- 将评价星星start抽取成UI组件，因为会有多个地方使用到星星评价 -->
+                <Star :score="shop.rating" :size="24"/>
                 <div class="rating_section">
                   {{shop.rating}}
                 </div>
@@ -49,7 +46,12 @@
               </p>
             </section>
           </div>
-        </a>
+        </div>
+      </router-link>
+    </ul>
+    <ul v-else>
+      <li v-for="item in 10" :key="item">
+        <img src="./images/shop_back.svg">
       </li>
     </ul>
   </div>
@@ -57,6 +59,7 @@
 
 <script>
   import {mapState} from 'vuex'
+  import Star from '../Star/Star.vue'
   export default{
     data(){
       return {
@@ -65,6 +68,9 @@
     },
     computed: {
       ...mapState(['shops'])
+    },
+    components: {
+      Star
     }
   }
 </script>
@@ -77,7 +83,7 @@
       .shop_li
         bottom-border-1px(#f1f1f1)
         width 100%
-        >a
+        >div
           clearFix()
           display block
           box-sizing border-box
@@ -134,54 +140,6 @@
               .shop_rating_order_left
                 float left
                 color #ff9a0d
-                .star //2x图 3x图
-                  float left
-                  font-size 0
-                  .star-item
-                    display inline-block
-                    background-repeat no-repeat
-                  &.star-48
-                    .star-item
-                      width 20px
-                      height 20px
-                      margin-right 22px
-                      background-size 20px 20px
-                      &:last-child
-                        margin-right: 0
-                      &.on
-                        bg-image('./images/stars/star48_on')
-                      &.half
-                        bg-image('./images/stars/star48_half')
-                      &.off
-                        bg-image('./images/stars/star48_off')
-                  &.star-36
-                    .star-item
-                      width 15px
-                      height 15px
-                      margin-right 6px
-                      background-size 15px 15px
-                      &:last-child
-                        margin-right 0
-                      &.on
-                        bg-image('./images/stars/star36_on')
-                      &.half
-                        bg-image('./images/stars/star36_half')
-                      &.off
-                        bg-image('./images/stars/star36_off')
-                  &.star-24
-                    .star-item
-                      width 10px
-                      height 10px
-                      margin-right 3px
-                      background-size 10px 10px
-                      &:last-child
-                        margin-right 0
-                      &.on
-                        bg-image('./images/stars/star24_on')
-                      &.half
-                        bg-image('./images/stars/star24_half')
-                      &.off
-                        bg-image('./images/stars/star24_off')
                 .rating_section
                   float left
                   font-size 10px
