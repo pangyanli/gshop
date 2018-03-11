@@ -1,0 +1,48 @@
+<template>
+  <div>
+    <ShopHeader/>
+    <div class="tab">
+      <div class="tab-item">
+        <router-link to="/shop/goods">点餐</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="/shop/ratings">评价</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="/shop/info">商家</router-link>
+      </div>
+    </div>
+    <router-view/>
+  </div>
+</template>
+
+<script>
+  import ShopHeader from '../../components/ShopHeader/ShopHeader.vue'
+  export default{
+    // 发送ajax请求异步获取商家信息info
+    mounted(){ // 注意mounted是个函数
+      this.$store.dispatch('getShopInfo')
+    },
+    components: {
+      ShopHeader
+    }
+  }
+</script>
+
+<style lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/mixins.styl"
+  .tab
+    height 40px
+    line-height 40px
+    bottom-border-1px(rgba(7, 17, 27, 0.1))
+    .tab-item
+      float left
+      width: 33.33333%
+      text-align center
+      font-size 14px
+      color rgb(77, 85, 93)
+      a
+        display block
+        &.router-link-active
+          color #02a774
+</style>

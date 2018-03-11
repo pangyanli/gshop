@@ -294,6 +294,18 @@
    ### 8、Login.vue：点击登录按钮后能正确登录进去到指定的的页面，效果没有问题，但是控制台有报错
         unknown mutation type: RECEIVE_USER_INFO ，这是因为commit的时候给变量加引号了
          commit('RECEIVE_USER_INFO',{userInfo})错误的 --> 应该是 commit(RECEIVE_USER_INFO,{userInfo})
+   ### 9、问题：要实现从Login.vue文件的login页面点击登录按钮，进入到我的页面，应该显示个人信息，如果是用手机短信
+          登录进来的，应该显示手机号，如果是密码登录进来的应该显示用户名（有手机号的也一起显示手机号），
+          但是还没登录进去点击点击我的页面的登录/注册时，不能跳转到登录页面，地址栏好多乱码
+          原因：是在Profile.vue文件中的模版代码router-link标签中的to='...'写错了，应该在to前面加上：因为如果不写
+          to的值就是字符串，写了冒号才是表达式
+         这样是错误的：<router-link to="userInfo._id ? '/userInfo': '/login' " class="profile-link">
+        正确的： <router-link :to="userInfo._id ? '/userInfo': '/login' " class="profile-link">
+   ### 10、快速格式化：ctrl+all+L
+
+
+
+
 ## 使用vue脚手架创建项目的具体步骤
   ### 一初始化项目
       1、在指定的位置的地址栏中输入cmd，打开命令提示符
