@@ -16,7 +16,9 @@ import {
   RECEIVE_USER_INFO,
   RECEIVE_SHOP_GOODS,
   RECEIVE_SHOPS_RATINGS,
-  RECEIVE_SHOPS_INFO
+  RECEIVE_SHOPS_INFO,
+  INCREMENT_FOOD_COUNT,
+  DECREMENT_FOOD_COUNT
 } from './mutation-types'
 /*
  使用async和await的作用:
@@ -57,12 +59,12 @@ export default {
       commit(RECEIVE_USER_INFO, {userInfo: result.data})
     }
   },
-
   // 6、获取商品列表
-  async getShopGoods({commit}){
+  async getShopGoods({commit}, callback){
     let result = await reqShopGoods()
     if(result.code===0) {
       commit(RECEIVE_SHOP_GOODS, {shopGoods: result.data})
+      callback && callback()
     }
   },
   // 7、获取评价列表
@@ -72,12 +74,19 @@ export default {
       commit(RECEIVE_SHOPS_RATINGS, {shopRatings: result.data})
     }
   },
-
   // 8、获取商家信息
   async getShopInfo({commit}){
     let result = await reqShopInfo()
     if (result.code === 0) {
       commit(RECEIVE_SHOPS_INFO, {shopInfo: result.data})
+    }
+  },
+  // 9、增加food的count数量
+  updateFoodCount({commit},{food, isAdd}){
+    if(isAdd){ // 增加
+      commit(INCREMENT_FOOD_COUNT, {food})
+    }else{ // 减少
+      commit(DECREMENT_FOOD_COUNT, {food})
     }
   }
 }

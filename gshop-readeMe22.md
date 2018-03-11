@@ -302,6 +302,16 @@
          这样是错误的：<router-link to="userInfo._id ? '/userInfo': '/login' " class="profile-link">
         正确的： <router-link :to="userInfo._id ? '/userInfo': '/login' " class="profile-link">
    ### 10、快速格式化：ctrl+all+L
+   ### 11、ShopGoods.vue
+        问题：使用BScroll后没有滑动的效果，也不报错
+        原因：1）在创建BScroll对象时，第一个参数要通过对应的选择器类定位取到
+              2）dispatch()传入第二个参数（回调函数）后，一定要记得通知响应的action接收，
+                  并在commit后调用（注意通过&&判断是否存在）
+   ### 12、将伪数组lis转换为真数组并遍历，但是读不到tops，报错如下
+        Error in nextTick: "TypeError: Cannot assign to read only property 'length' of object '#<HTMLCollection>'"
+        原因是：将伪数组转为真数组时，slice单词写错了，写成了splice，所以无法获取到tops
+        错误的写法： Array.prototype.splice.call(lis).forEach((li, index) => {
+        应该这样写： Array.prototype.slice.call(lis).forEach((li, index) => {
 
 
 
@@ -323,6 +333,83 @@
           ？Set up unit test   -->  n （不需要安装单元测试文件）
           ？Set up e2e test with ....   --> n （不需要）
           ？Should we run 'npm install' for you after... -->  Yes ,use NPM（然后就安装依赖了）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
