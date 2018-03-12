@@ -47,8 +47,8 @@ export default {
       // food.count = 1   // 第一次点count就是1
       //问题：新添加的属性没有数据劫持-->数据绑定-->数据更新了但是界面并不更新
       // 解决：Vue.set(目标元素，属性名，属性值)  // 注意属性名是字符串
-      Vue.set(food,'count',1)
-
+      Vue.set(food,'count',1)  // 给有数据绑定的对象添加指定属性名和值的属性(有绑定)
+      state.shopCart.push(food) // 添加到购物车
     }else{
       food.count ++    // 如果有就增加1
     }
@@ -57,6 +57,9 @@ export default {
   [DECREMENT_FOOD_COUNT](state,{food}){
     if(food.count){
       food.count --
+      if(food.count === 0){  // 如果数量为0，从购物车中移除
+        state.shopCart.splice( state.shopCart.indexOf(food),1)
+      }
     }
   },
 }
