@@ -245,6 +245,13 @@
               components/AlertTip/AlertTip.vue,从world文档里赋值模版代码，在 Login.vue中引入AlertTip组件
             2）输入合法手机号-->点击获取验证码，向后台发请求获取-->收到验证码输入-->正确则回退到上一页/错误显示提示框
 
+
+     ### 十三、shopCart.vue
+         （2）
+         （2） 设计购物车列表为一个数组shopCart，数组里面是一个一个food对象，food对象上有count属性，所以这个数组是一个
+          所有count大于0的food组成的数组,但是这个数组放在哪里管理呢？1）可以通过计算属性来获得，但是只要有改变
+          就会重新计算来遍历得到每个count大于0的food，所以效率不高，2）将该数组放到vuex中的state来管理，操作count
+          增加或者是减少时，状态改变就可以了，就不用计算了
 ## 项目中遇到的问题
   ### 1、FooterGuide 点击订单时没有显示内容，
       （1）原因1：是因为路由配置时/后面多了个空格
@@ -312,8 +319,17 @@
         原因是：将伪数组转为真数组时，slice单词写错了，写成了splice，所以无法获取到tops
         错误的写法： Array.prototype.splice.call(lis).forEach((li, index) => {
         应该这样写： Array.prototype.slice.call(lis).forEach((li, index) => {
-
-
+   ### 13、
+        问题：进入shopGoods页面（http://localhost:8080/#/shop/goods），多次切换点击点餐/评价/商家这三个路由链接后，
+            再去点击左上角的回退按钮，只能回到上一个路由链接，并不能直接跳转到指定的to="/shop/goods"（主页）
+        原因是：ruoter-link 除了to属性还有一个replace属性，不设置时默认是为false，点击跳转时，内部默认使用
+                router.push()，会有 history 记录，所以只能回退到上一次记录
+        解决：如果设置设置了repace属性，就为true,内部则使用router.replace()来实现跳转的，于是导航后不会留下
+                    history 记录，就可以跳转到指定的页面了
+   ### 14、 ShopCart.vue
+        问题：写完Food.vue页面，不管是在哪里点击那个加减购物的按钮，都只有count大于2的时候才会有highlight高亮效果，
+        解决：计算payClass属性时，应该是判断总价格大于等于最小价格时起效果，只看大于的不行
+               return totalPrice >= minPrice ? 'enough' : 'not-enough'
 
 
 ## 使用vue脚手架创建项目的具体步骤

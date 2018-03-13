@@ -4,6 +4,15 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './mock/MockServer'
+// 引入加载filter
+import './filters'
+import Split from './components/Split/Split.vue'
+
+
+
+// 将Split分隔组件注册成全局组件，就类似于router-link标签一样，
+// 在各个组件都可以直接使用，不用再引入并且映射成标签了
+Vue.component('Split',Split)
 
 new Vue({
   el: '#app',

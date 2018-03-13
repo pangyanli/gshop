@@ -19,12 +19,13 @@
       <div class="foods-wrapper">
         <ul ref="foodWrapperllUl">
           <!-- v-for 遍历ShopGoods 得到shopGood,  food-list-hook是专门提供给css外需要用的勾子标识-->
-          <li class="food-list food-list-hook" v-for="(shopGood, index) in shopGoods" :key="index">
+          <li class="food-list food-list-hook" v-for="(shopGood, index) in shopGoods" :key="index" >
             <h1 class="title">{{shopGood.name}}</h1>
             <!-- 给ul添加一个标识 能快速定位到这里，提高效率-->
             <ul>
               <!-- v-for 遍历foods 得到food-->
-              <li class="food-item bottom-border-1px" v-for="(food, index) in shopGood.foods" :key="index">
+              <li class="food-item bottom-border-1px" v-for="(food, index) in shopGood.foods" :key="index"
+                  @click.stop="showFood(food)">
                 <div class="icon">
                   <!-- 路径 -->
                   <img width="57" height="57" :src="food.icon">
@@ -51,6 +52,7 @@
       <!-- 底部购物车导航 -->
       <ShopCart/>
     </div>
+    <Food :food="selectedFood" ref="food"/>
   </div>
 </template>
 
@@ -59,13 +61,15 @@
   import {mapState} from 'vuex'
   import CartControl from '../../../components/CartControl/CartControl.vue'
   import ShopCart from '../../../components/ShopCart/ShopCart.vue'
+  import Food from '../../../components/Food/Food.vue'
 
   export default{
     data () {
       return {
         supportClasses: ['decrease', 'discount', 'guarantee', 'invoice', 'special'],
         scrollY:0,  // 右侧Y轴滑动的坐标
-        tops: []    // 包含所有分类列表小列表top值，通过top值来确定当前的li列表
+        tops: [],    // 包含所有分类列表小列表top值，通过top值来确定当前的li列表
+        selectedFood: {}  // 选择要显示的food
       }
     },
     mounted () {
@@ -141,11 +145,19 @@
         let scrollY = top
         // 右侧的foods列表平滑的滑动到指定的位置，因为scroll都是正值，但是向上滑动，所以top应该是负值的
         this.foodsScroll.scrollTo(0,-top,300)  // 0是初始位置，-top是指定滑动的位置，300是时间
+      },
+      // 显示指定的food
+      showFood(food){
+        // 保存当前的food
+        this.selectedFood = food
+        // 显示food
+        this.$refs.food.showOrHide(true) // 通过ref来实现父组件调用子组件
       }
     },
     components: {
       CartControl,
-      ShopCart
+      ShopCart,
+      Food
     }
   }
 </script>
@@ -156,7 +168,7 @@
   .goods
     display: flex
     position: absolute
-    top: 174px
+    top: 191px
     bottom: 46px
     width: 100%
     overflow: hidden

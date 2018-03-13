@@ -3,13 +3,18 @@
     <ShopHeader/>
     <div class="tab">
       <div class="tab-item">
-        <router-link to="/shop/goods">点餐</router-link>
+        <!-- ruoter-link 除了to属性还有一个replace属性，不设置时默认是为false，点击跳转时，内部默认使用
+         router.push()，如果设置设置了repace属性，则为true,则是使用router.replace()来实现跳转的，于是导航后不会留下
+         history 记录，所以多次切换点击这三个路由链接后，再点击shopHeader页面头部左上角回退按钮时
+         就可以直接回退到指定的页面了（首页）-->
+
+        <router-link to="/shop/goods" replace>点餐</router-link>
       </div>
       <div class="tab-item">
-        <router-link to="/shop/ratings">评价</router-link>
+        <router-link to="/shop/ratings" replace>评价</router-link>
       </div>
       <div class="tab-item">
-        <router-link to="/shop/info">商家</router-link>
+        <router-link to="/shop/info" replace>商家</router-link>
       </div>
     </div>
     <router-view/>

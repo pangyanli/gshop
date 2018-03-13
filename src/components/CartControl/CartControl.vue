@@ -2,12 +2,12 @@
   <div class="cartcontrol">
     <!-- 小圆 - style="display: none;" 样式都使用v-show来控制 ,false表示不增加-->
     <transition name="move">
-      <div class="iconfont icon-remove_circle_outline" v-show="food.count" @click="updateFoodCount(false)"></div>
+      <div class="iconfont icon-remove_circle_outline" v-show="food.count" @click.stop="updateFoodCount(false)"></div>
     </transition>
       <!-- 购物车的数量count -->
     <div class="cart-count" v-show="food.count">{{food.count}}</div>
     <!-- 小圆 + true表示增加-->
-    <div class="iconfont icon-add_circle" @click="updateFoodCount(true)"></div>
+    <div class="iconfont icon-add_circle" @click.stop="updateFoodCount(true)"></div>
   </div>
 </template>/
 

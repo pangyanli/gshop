@@ -3,6 +3,10 @@
     <div class="content-wrapper">
       <div class="avatar">
         <img :src="shopInfo.avatar">
+        <!-- ruoter-link 除了to属性还有一个replace属性，不设置时默认是为false，点击跳转时，内部默认使用
+         router.push()，如果设置为true,则是使用router.replace()来实现跳转的，于是导航后不会留下
+         history 记录，所以多次切换点击这三个路由链接后，再点击shopHeader页面头部左上角回退按钮时
+         就可以直接回退到指定的页面了（首页）-->
         <div class="back" @click="$router.back()">
           <i class="iconfont icon-arrow_left"></i>
         </div>
@@ -211,7 +215,7 @@
         font-weight 200
       .icon-keyboard_arrow_right
         position absolute
-        right 7px
+        right 3px
     .bg
       position absolute
       top: 0
